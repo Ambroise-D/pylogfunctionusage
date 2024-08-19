@@ -56,11 +56,12 @@ Using this module is incredibly simple. All you need is to decorate your functio
 
 ## Installation
 
-you can clone the repository and install it from source:
-
+You can pip install:
 ```bash
 pip install pylogfunctionusage
 ```
+Or you can clone the repository and install it from source:
+
 ```bash
 git clone https://github.com/Ambroise-D/pylogfunctionusage.git
 cd pylogfunctionusage
