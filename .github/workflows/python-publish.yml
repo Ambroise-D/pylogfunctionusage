@@ -17,24 +17,43 @@ permissions:
   contents: read
 
 jobs:
-  pypi-publish:
+  check_dist:
     runs-on: ubuntu-latest
 
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Upload the distribution files as an artifact
+      - name: Upload distribution files
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-files
+          path: ./dist/
+
+  pypi-publish:
+    runs-on: ubuntu-latest
+    needs: check_dist
+
     permissions:
-      # IMPORTANT: this permission is mandatory for trusted publishing
       id-token: write
 
-    # Dedicated environments with protections for publishing are strongly recommended.
     environment:
       name: pypi
-      # OPTIONAL: uncomment and update to include your PyPI project URL in the deployment status:
       url: https://pypi.org/project/pylogfunctionusage/
 
     steps:
-      - name: Retrieve release distributions
-        uses: actions/download-artifact@v4
-        with:
-          path: dist/
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
 
+      # Download the distribution files from the previous job
+      - name: Download distribution files
+        uses: actions/download-artifact@v3
+        with:
+          name: dist-files
+
+      # Publish release distributions to PyPI
       - name: Publish release distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
